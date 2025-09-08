@@ -1,3 +1,5 @@
+### Link to Git Repository: https://github.com/yuhan0113/40005-Advanced-iOS-Assignment2-AeroLog.git
+
 # 40005-Advanced-iOS-Assignment2-AeroLog
 The app for user to track and log their flights
 
@@ -9,13 +11,15 @@ _Aerolog_ is a SwiftUI-based iOS application designed to help travellers manage 
 
 ## 📦 Features
 
-- Manage tasks related to travel (e.g., flights, packing, bookings)
-- Add, edit, delete travel tasks with ease
-- Toggle task completion
-- Date-based sorting
-- Polished UI following Apple HIG (Human Interface Guidelines)
-- Error handling for empty inputs
-- MVVM architecture for clean separation of concerns
+- Track flights with airline selection and scheduling
+- Auto-match airline code from flight number (e.g. "QF123" → Qantas)
+- Searchable airline picker with logos (e.g. from asset images like `QF.png`)
+- Add, edit, and delete flight tasks
+- Toggle flight completion status
+- Weather preview on flight detail screen
+- User profile view
+- Error handling for invalid input
+- Clean, responsive UI following Apple Human Interface Guidelines
 
 ---
 
@@ -44,6 +48,7 @@ class BaseTask: TravelTask {
 
 class FlightTask: BaseTask {
     var flightNumber: String
+    var airline: Airline
 }
 ```
 - Encapsulation: Task state is encapsulated within model classes
@@ -80,10 +85,11 @@ The UI is implemented using SwiftUI, following Apple’s design principles:
 - Smooth user experience with toggle actions and animations
 
 Key Views:
-- ContentView: Displays all tasks
-- TaskFormView: Adds a new task
-- TaskRowView: Displays individual task rows
-
+- ContentView: Flight dashboard
+- AddFlightView: Add new flight
+- FlightDetailView: Detailed info with weather
+- UserProfileView: Editable user information
+ 
 ---
 
 ## 🧯 Error Handling
@@ -94,9 +100,8 @@ Basic error handling is implemented to guide the user:
 	•	Future-proofed for extending to network or database errors
 
 ```swift
-guard !newTitle.isEmpty else {
-    print("Error: Title required")
-    return
+guard !flightNumber.isEmpty else {
+    throw TaskError.invalidInput
 }
 ```
 
@@ -114,10 +119,10 @@ Unit tests ensure core functionality is reliable:
 
 Example test:
 ```swift
-func testMarkTaskCompleted() {
-    let task = BaseTask(title: "Pack passport", dueDate: Date())
-    task.markCompleted()
-    XCTAssertTrue(task.isCompleted)
+func testAddInvalidTaskThrowsError() {
+    XCTAssertThrowsError(try viewModel.addTask(...)) { error in
+        XCTAssertEqual(error as? TaskError, .invalidInput)
+    }
 }
 ```
 ---
@@ -142,15 +147,6 @@ func testMarkTaskCompleted() {
 - Fix: Guard statements for required fields
 
 🛠️ Debugging: Used Xcode’s View Debugger and print() tracing to verify model updates
-
----
-
-## 📄 Reflective Report (Optional)
-
-This report is not included but can be added if required. It would include:
-	•	Personal reflections on design choices
-	•	Lessons learned during development
-	•	Thoughts on POP vs OOP trade-offs
 
 ---
 
