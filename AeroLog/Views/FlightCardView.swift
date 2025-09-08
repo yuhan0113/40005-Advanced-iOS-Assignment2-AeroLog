@@ -9,14 +9,25 @@ struct FlightCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text("✈️ \(task.flightNumber)")
-                    .font(.headline)
+                // Airline icon + name
+                HStack(spacing: 8) {
+                    Image(systemName: task.airline.icon)
+                        .foregroundColor(task.airline.color)
+                    Text(task.airline.rawValue)
+                        .font(.subheadline)
+                        .foregroundColor(.primary)
+                }
+
                 Spacer()
+
                 if task.isCompleted {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
                 }
             }
+
+            Text("✈️ \(task.flightNumber)")
+                .font(.headline)
 
             Text("\(task.departure) → \(task.arrival)")
                 .font(.subheadline)

@@ -9,7 +9,7 @@ struct FlightDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Weather Info
+                // Simulated Weather Info
                 HStack {
                     Text("18°C")
                         .font(.largeTitle)
@@ -30,12 +30,14 @@ struct FlightDetailView: View {
                     .font(.title2)
                     .bold()
 
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: 12) {
+                    // Dynamic airline display
                     HStack {
-                        Image(systemName: "airplane.circle.fill")
-                            .foregroundColor(.red)
-                        Text("Qantas \(task.flightNumber)")
+                        Image(systemName: task.airline.icon)
+                            .foregroundColor(task.airline.color)
+                        Text("\(task.airline.rawValue) \(task.flightNumber)")
                             .bold()
+                            .foregroundColor(.primary)
                     }
 
                     Text("Arrive 5m Early")
@@ -43,13 +45,16 @@ struct FlightDetailView: View {
 
                     Text("Terminal: T1 · Gate: C25")
                         .font(.subheadline)
+                        .foregroundColor(.secondary)
 
                     HStack {
                         Text(task.departureTime)
                             .foregroundColor(.red)
                         Text(task.departure.uppercased())
                             .bold()
+
                         Spacer()
+
                         Text(task.arrivalTime)
                             .foregroundColor(.green)
                         Text(task.arrival.uppercased())

@@ -10,6 +10,7 @@ class FlightTask: BaseTask {
     var arrival: String
     var departureTime: String
     var arrivalTime: String
+    var airline: Airline
 
     init(title: String,
          flightNumber: String,
@@ -17,8 +18,10 @@ class FlightTask: BaseTask {
          arrival: String,
          departureTime: String,
          arrivalTime: String,
-         dueDate: Date) {
+         dueDate: Date,
+         airline: Airline) {
         
+        self.airline = airline
         self.flightNumber = flightNumber
         self.departure = departure
         self.arrival = arrival

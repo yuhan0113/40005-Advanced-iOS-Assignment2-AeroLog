@@ -13,7 +13,8 @@ class TaskViewModel: ObservableObject {
                  arrival: String,
                  departureTime: String,
                  arrivalTime: String,
-                 dueDate: Date) throws {
+                 dueDate: Date,
+                 airline: Airline) throws {
         
         guard !title.isEmpty, !flightNumber.isEmpty else {
             throw TaskError.invalidInput
@@ -26,7 +27,8 @@ class TaskViewModel: ObservableObject {
             arrival: arrival,
             departureTime: departureTime,
             arrivalTime: arrivalTime,
-            dueDate: dueDate
+            dueDate: dueDate,
+            airline: airline
         )
 
         tasks.append(newTask)

@@ -18,10 +18,19 @@ struct ContentView: View {
             }
             .navigationTitle("My Flights")
             .toolbar {
+                NavigationLink(destination: UserProfileView(viewModel: UserViewModel())) {
+                    Image(systemName: "person.circle")
+                }
+            }
+            .toolbar {
                 NavigationLink(destination: AddFlightView(viewModel: viewModel)) {
                     Image(systemName: "plus")
                 }
             }
         }
     }
+}
+
+#Preview {
+    ContentView()
 }
