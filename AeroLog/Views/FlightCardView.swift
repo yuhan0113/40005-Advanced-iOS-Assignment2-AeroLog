@@ -1,5 +1,5 @@
 //  Created by Yu-Han on 6/9/2025.
-//  UI for single flight task
+//  UI for single flight task (dashboard card)
 
 import SwiftUI
 
@@ -7,15 +7,20 @@ struct FlightCardView: View {
     let task: FlightTask
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                // Airline icon + name
-                HStack(spacing: 8) {
-                    Image(systemName: task.airline.icon)
-                        .foregroundColor(task.airline.color)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Image(task.airline.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 32, height: 32)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+
+                VStack(alignment: .leading, spacing: 4) {
                     Text(task.airline.rawValue)
+                        .font(.headline)
+                    Text(task.flightNumber)
                         .font(.subheadline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(.secondary)
                 }
 
                 Spacer()
@@ -26,17 +31,33 @@ struct FlightCardView: View {
                 }
             }
 
-            Text("✈️ \(task.flightNumber)")
-                .font(.headline)
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(task.departure.uppercased())
+                        .font(.subheadline)
+                    Text(task.departureTime)
+                        .font(.caption)
+                        .foregroundColor(.red)
+                }
 
-            Text("\(task.departure) → \(task.arrival)")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+                Spacer()
 
-            Text("\(task.departureTime) - \(task.arrivalTime)")
-                .font(.caption)
-                .foregroundColor(.gray)
+                Image(systemName: "airplane")
+                    .font(.title2)
+
+                Spacer()
+
+                VStack(alignment: .trailing) {
+                    Text(task.arrival.uppercased())
+                        .font(.subheadline)
+                    Text(task.arrivalTime)
+                        .font(.caption)
+                        .foregroundColor(.green)
+                }
+            }
         }
-        .padding(.vertical, 8)
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
     }
 }

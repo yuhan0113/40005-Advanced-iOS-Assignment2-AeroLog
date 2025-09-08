@@ -1,28 +1,46 @@
-import Foundation
 import SwiftUI
 
-// Enum to represent supported airlines
 enum Airline: String, CaseIterable, Identifiable {
     case qantas = "Qantas"
     case virgin = "Virgin Australia"
     case jetstar = "Jetstar"
-    case rex = "Rex"
-    case air_new_zealand = "Air New Zealand"
+    case airchina = "Air China"
+    case chinaairlines = "China Airlines"
+    case emirates = "Emirates"
+    case american = "American Airlines"
+    case cathay = "Cathay Pacific"
 
     var id: String { self.rawValue }
 
-    var icon: String {
+    var code: String {
         switch self {
-        case .qantas:
-            return ""
-        case .virgin:
-            return ""
-        case .jetstar:
-            return ""
-        case .rex:
-            return ""
-        case .air_new_zealand:
-            return "NZ.png"
+        case .qantas: return "QF"
+        case .virgin: return "VA"
+        case .jetstar: return "JQ"
+        case .airchina: return "CA"
+        case .chinaairlines: return "CI"
+        case .emirates: return "EK"
+        case .american: return "AA"
+        case .cathay: return "CX"
+        }
+    }
+
+    var imageName: String {
+        return code
+    }
+
+    /// Fallback image view for logo
+    @ViewBuilder
+    var displayImage: some View {
+        if UIImage(named: imageName) != nil {
+            Image(imageName)
+                .resizable()
+                .scaledToFit()
+        } else {
+            Image(systemName: "airplane.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(.gray)
         }
     }
 
@@ -31,18 +49,11 @@ enum Airline: String, CaseIterable, Identifiable {
         case .qantas: return .red
         case .virgin: return .purple
         case .jetstar: return .orange
-        case .rex: return .blue
-        case .air_new_zealand: return .black
-        }
-    }
-
-    var code: String {
-        switch self {
-        case .qantas: return "QF"
-        case .virgin: return "VA"
-        case .jetstar: return "JQ"
-        case .rex: return "ZL"
-        case .air_new_zealand: return "NZ"
+        case .airchina: return .blue
+        case .chinaairlines: return .pink
+        case .emirates: return .red
+        case .american: return .gray
+        case .cathay: return .green
         }
     }
 }

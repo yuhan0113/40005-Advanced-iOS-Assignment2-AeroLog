@@ -11,7 +11,8 @@ final class AerologTests: XCTestCase {
             arrival: "Perth",
             departureTime: "10:00AM",
             arrivalTime: "3:00PM",
-            dueDate: Date()
+            dueDate: Date(),
+            airline: .qantas
         )
 
         XCTAssertFalse(task.isCompleted)
@@ -19,7 +20,8 @@ final class AerologTests: XCTestCase {
         XCTAssertTrue(task.isCompleted)
     }
 
-    @MainActor func testAddValidTaskToViewModel() throws {
+    @MainActor
+    func testAddValidTaskToViewModel() throws {
         let viewModel = TaskViewModel()
 
         try viewModel.addTask(
@@ -29,13 +31,16 @@ final class AerologTests: XCTestCase {
             arrival: "Brisbane",
             departureTime: "9:00AM",
             arrivalTime: "11:00AM",
-            dueDate: Date()
+            dueDate: Date(),
+            airline: .qantas
         )
 
         XCTAssertEqual(viewModel.tasks.count, 1)
+        XCTAssertEqual(viewModel.tasks[0].flightNumber, "QF2")
     }
 
-    @MainActor func testAddInvalidTaskThrowsError() {
+    @MainActor
+    func testAddInvalidTaskThrowsError() {
         let viewModel = TaskViewModel()
 
         XCTAssertThrowsError(
@@ -46,7 +51,8 @@ final class AerologTests: XCTestCase {
                 arrival: "Brisbane",
                 departureTime: "9:00AM",
                 arrivalTime: "11:00AM",
-                dueDate: Date()
+                dueDate: Date(),
+                airline: .qantas
             )
         ) { error in
             XCTAssertEqual(error as? TaskError, TaskError.invalidInput)

@@ -29,8 +29,9 @@ struct AddFlightView: View {
                     List {
                         ForEach(filteredAirlines) { airline in
                             HStack {
-                                Image(systemName: airline.icon)
-                                    .foregroundColor(airline.color)
+                                airline.displayImage
+                                    .frame(width: 24, height: 24)
+
                                 VStack(alignment: .leading) {
                                     Text(airline.rawValue)
                                     Text(airline.code)
@@ -53,9 +54,10 @@ struct AddFlightView: View {
                     }
                     .frame(maxHeight: 150)
                 } else {
-                    HStack {
-                        Image(systemName: selectedAirline.icon)
-                            .foregroundColor(selectedAirline.color)
+                    HStack(spacing: 8) {
+                        selectedAirline.displayImage
+                            .frame(width: 24, height: 24)
+
                         Text("Selected: \(selectedAirline.rawValue)")
                             .foregroundColor(.secondary)
                     }
