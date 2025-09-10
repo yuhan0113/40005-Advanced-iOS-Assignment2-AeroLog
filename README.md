@@ -1,9 +1,7 @@
-### Link to Git Repository: https://github.com/yuhan0113/40005-Advanced-iOS-Assignment2-AeroLog.git
+#### Link to Git Repository: https://github.com/yuhan0113/40005-Advanced-iOS-Assignment2-AeroLog.git
 
 # 40005-Advanced-iOS-Assignment2-AeroLog
-The app for user to track and log their flights
-
-# ✈️ Aerolog — Travel Task Management App
+## ✈️ AeroLog — Travel Task Management App
 
 _Aerolog_ is a SwiftUI-based iOS application designed to help travellers manage trip-related tasks with clarity and ease. Developed for **Assessment Task 2** in the subject **40005 Advanced iOS**, this project showcases the integration of **object-oriented** and **protocol-oriented** programming, clean MVVM architecture, structured error handling, unit testing, and proper version control with Git.
 
@@ -11,13 +9,13 @@ _Aerolog_ is a SwiftUI-based iOS application designed to help travellers manage 
 
 ## 📦 Features
 
-- Track flights with airline selection and scheduling
-- Auto-match airline code from flight number (e.g. "QF123" → Qantas)
-- Searchable airline picker with logos (e.g. from asset images like `QF.png`)
+- Track flights with airline selection and scheduling (blur search supported)
+- Auto-match airline IATA code from flight number (e.g. "QF123" -> Qantas)
+- Searchable airline picker with logos (e.g. from asset images like `QF.png` represents Qantas, `CX.png` represents Cathay Pacific)
 - Add, edit, and delete flight tasks
 - Toggle flight completion status
-- Weather preview on flight detail screen
-- User profile view
+- Weather preview on flight detail screen (random weather for demo purposes)
+- User profile view (editable personal information, frequent flyer number)
 - Error handling for invalid input
 - Clean, responsive UI following Apple Human Interface Guidelines
 
@@ -117,13 +115,24 @@ Unit tests ensure core functionality is reliable:
 - ✅ ViewModel task addition and deletion
 - ✅ Guarding against invalid input
 
-Example test:
+Example:
 ```swift
-func testAddInvalidTaskThrowsError() {
-    XCTAssertThrowsError(try viewModel.addTask(...)) { error in
-        XCTAssertEqual(error as? TaskError, .invalidInput)
+    func testFlightTaskMarkCompleted() {
+        let task = FlightTask(
+            title: "QF1 Sydney to Perth",
+            flightNumber: "QF1",
+            departure: "Sydney",
+            arrival: "Perth",
+            departureTime: "10:00AM",
+            arrivalTime: "3:00PM",
+            dueDate: Date(),
+            airline: .qantas
+        )
+
+        XCTAssertFalse(task.isCompleted)
+        task.markCompleted()
+        XCTAssertTrue(task.isCompleted)
     }
-}
 ```
 ---
 
@@ -151,8 +160,10 @@ func testAddInvalidTaskThrowsError() {
 ---
 
 ## Author
-Yu-Han Chang (John)
+Student: Yu-Han Chang (John)
 
-Bachelor of IT, University of Technology Sydney
+Student ID: 14542423
 
 Subject: 40005 Advanced iOS Development
+
+Bachelor of IT, University of Technology Sydney
