@@ -9,6 +9,8 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .center, spacing: 16) {
+                
+                // Empty state: Show welcome message and an icon
                 if viewModel.tasks.isEmpty {
                     Spacer()
                     VStack(spacing: 12) {
@@ -28,7 +30,9 @@ struct ContentView: View {
                             .padding(.horizontal)
                     }
                     Spacer()
-                } else {
+                }
+                // List State: show flight task cards
+                else {
                     List {
                         Section(header: Text("Upcoming Flights")) {
                             ForEach(viewModel.tasks) { task in
@@ -45,6 +49,8 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("My Flights")
+            
+            // Toolbar button: profile (left), add flight (right)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: AddFlightView(viewModel: viewModel)) {

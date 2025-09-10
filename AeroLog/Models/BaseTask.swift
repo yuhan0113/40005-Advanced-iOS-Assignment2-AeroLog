@@ -16,7 +16,8 @@ class BaseTask: TravelTask, Identifiable {
         self.dueDate = dueDate
         self.isCompleted = isCompleted
     }
-
+    
+    // Marks task as completed
     func markCompleted() {
         isCompleted = true
     }

@@ -3,9 +3,11 @@
 
 import Foundation
 
+// Defines custom error types for task-related issues
 enum TaskError: Error, LocalizedError {
     case invalidInput
-
+    
+    // Display user-readable error messages
     var errorDescription: String? {
         switch self {
         case .invalidInput:

@@ -5,9 +5,12 @@ import SwiftUI
 
 struct FlightCardView: View {
     let task: FlightTask
+    // Individual flight task to display
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
+            
+            // Airline and flight info row
             HStack(spacing: 8) {
                 Image(task.airline.imageName)
                     .resizable()
@@ -16,21 +19,27 @@ struct FlightCardView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 6))
 
                 VStack(alignment: .leading, spacing: 4) {
+                    
+                    // Airline name
                     Text(task.airline.rawValue)
                         .font(.headline)
+                    
+                    // Flight number
                     Text(task.flightNumber)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
 
                 Spacer()
-
+                
+                // Completion icon
                 if task.isCompleted {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
                 }
             }
-
+            
+            // Departure -> Arrival section
             HStack {
                 VStack(alignment: .leading) {
                     Text(task.departure.uppercased())

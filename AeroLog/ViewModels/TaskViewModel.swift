@@ -6,7 +6,8 @@ import Foundation
 @MainActor
 class TaskViewModel: ObservableObject {
     @Published var tasks: [FlightTask] = []
-
+    
+    /// Adds a new flight task with basic input validation
     func addTask(title: String,
                  flightNumber: String,
                  departure: String,
@@ -16,6 +17,7 @@ class TaskViewModel: ObservableObject {
                  dueDate: Date,
                  airline: Airline) throws {
         
+        // Ensure required fields are provided
         guard !title.isEmpty, !flightNumber.isEmpty else {
             throw TaskError.invalidInput
         }
@@ -33,11 +35,13 @@ class TaskViewModel: ObservableObject {
 
         tasks.append(newTask)
     }
-
+    
+    /// Removes a task at given index
     func removeTask(at offsets: IndexSet) {
         tasks.remove(atOffsets: offsets)
     }
-
+    
+    /// Toggles completion state of a given task
     func toggleCompletion(for task: FlightTask) {
         task.isCompleted.toggle()
     }

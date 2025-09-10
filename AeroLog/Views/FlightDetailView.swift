@@ -11,7 +11,7 @@ struct FlightDetailView: View {
         ScrollView {
             VStack(spacing: 24) {
 
-                // 🌤 Weather Block
+                // Weather Block
                 HStack(spacing: 16) {
                     VStack(alignment: .leading) {
                         Text("Weather at Arrival")
@@ -37,7 +37,7 @@ struct FlightDetailView: View {
                 .background(Color(.systemGray6))
                 .cornerRadius(12)
 
-                // ✈️ Airline Info Block
+                // Airline Information Block
                 HStack(spacing: 12) {
                     task.airline.displayImage
                         .frame(width: 36, height: 36)
@@ -62,7 +62,7 @@ struct FlightDetailView: View {
 
                 Divider()
 
-                // ✈️ Flight Route + Times
+                // Flight Route + Times
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Flight Route")
                         .font(.caption)
@@ -95,7 +95,7 @@ struct FlightDetailView: View {
 
                 Divider()
 
-                // 🛬 Terminal + Gate Info
+                // Terminal + Gate Info
                 HStack {
                     Image(systemName: "door.left.hand.open")
                     Text("Terminal T1 · Gate C25")
@@ -110,4 +110,3 @@ struct FlightDetailView: View {
         .navigationTitle("Flight Details")
     }
 }
-

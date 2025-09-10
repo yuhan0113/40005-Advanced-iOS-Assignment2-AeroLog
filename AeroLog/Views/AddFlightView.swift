@@ -6,7 +6,8 @@ import SwiftUI
 struct AddFlightView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: TaskViewModel
-
+    
+    // Form input fields
     @State private var flightNumber = ""
     @State private var departure = ""
     @State private var arrival = ""
@@ -14,12 +15,15 @@ struct AddFlightView: View {
     @State private var arrivalTimeDate = Date()
     @State private var dueDate = Date()
     @State private var selectedAirline = Airline.qantas
+    
+    // Error and search state
     @State private var showAlert = false
     @State private var errorMessage = ""
     @State private var searchText = ""
 
     var body: some View {
         Form {
+            // Airline selection section (searchable)
             Section(header: Text("Select Airline")) {
                 TextField("Search airline or code", text: $searchText)
                     .textInputAutocapitalization(.never)
@@ -63,7 +67,8 @@ struct AddFlightView: View {
                     }
                 }
             }
-
+            
+            // Flight information input section
             Section(header: Text("Flight Info")) {
                 TextField("Flight Number (e.g. QF123)", text: $flightNumber)
                     .autocapitalization(.allCharacters)
@@ -76,7 +81,8 @@ struct AddFlightView: View {
 
                 DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
             }
-
+            
+            // Task submission button
             Button("Add Flight") {
                 let departureTime = formatTime(departureTimeDate)
                 let arrivalTime = formatTime(arrivalTimeDate)
@@ -103,6 +109,8 @@ struct AddFlightView: View {
         } message: {
             Text(errorMessage)
         }
+        
+        // Auto match airline based on flight number prefix (e.g. QF123)
         .onChange(of: flightNumber) { newValue in
             let code = String(newValue.prefix(2)).uppercased()
             if let matched = Airline.allCases.first(where: { $0.code == code }) {
@@ -111,7 +119,7 @@ struct AddFlightView: View {
         }
     }
 
-    // Filter airlines by name or code
+    // Filter airlines by name or IATA code
     var filteredAirlines: [Airline] {
         if searchText.isEmpty {
             return Airline.allCases
@@ -123,7 +131,7 @@ struct AddFlightView: View {
         }
     }
 
-    // Format Date to time string (e.g. "3:45 PM")
+    // Converts a data object to a formatted time string ("3:34 PM")
     func formatTime(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
@@ -131,7 +139,7 @@ struct AddFlightView: View {
     }
 }
 
-// Helper to dismiss keyboard on tap
+// Helper to dismiss keyboard when tapping outside input
 #if canImport(UIKit)
 extension View {
     func hideKeyboard() {

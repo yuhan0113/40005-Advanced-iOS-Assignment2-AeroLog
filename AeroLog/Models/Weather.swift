@@ -1,11 +1,16 @@
+//  Created by Yu-Han on 6/9/2025.
+//  Simple weather model with randomised mock data
+
 import SwiftUI
 
+// Represents mock weather data
 struct Weather {
     let temperature: String
     let description: String
     let iconName: String
 }
 
+// Provides random weather for demo purposes
 extension Weather {
     static func random() -> Weather {
         let options = [
