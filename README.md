@@ -1,4 +1,4 @@
-### Link to Git Repository: https://github.com/yuhan0113/40005-Advanced-iOS-Assignment2-AeroLog.git
+#### Link to Git Repository: https://github.com/yuhan0113/40005-Advanced-iOS-Assignment2-AeroLog.git
 
 # 40005-Advanced-iOS-Assignment2-AeroLog
 ## ✈️ AeroLog — Travel Task Management App
