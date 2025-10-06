@@ -1,5 +1,10 @@
+//
+//  ContentView.swift
+//  AeroLog
+//
 //  Created by Yu-Han on 6/9/2025.
 //  Dashboard UI shows "My Flights"
+//
 
 import SwiftUI
 
@@ -8,9 +13,8 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .center, spacing: 16) {
+            VStack(spacing: 16) {
                 
-                // Empty state: Show welcome message and an icon
                 if viewModel.tasks.isEmpty {
                     Spacer()
                     VStack(spacing: 12) {
@@ -23,18 +27,16 @@ struct ContentView: View {
                             .font(.title2)
                             .fontWeight(.semibold)
 
-                        Text("Start manage your trips by adding a flight")
+                        Text("Start managing your trips by adding a flight")
                             .font(.body)
                             .multilineTextAlignment(.center)
                             .foregroundColor(.secondary)
                             .padding(.horizontal)
                     }
                     Spacer()
-                }
-                // List State: show flight task cards
-                else {
+                } else {
                     List {
-                        Section(header: Text("Upcoming Flights")) {
+                        Section(header: Text("Upcoming Flights (\(viewModel.tasks.count))")) {
                             ForEach(viewModel.tasks) { task in
                                 NavigationLink(destination: FlightDetailView(task: task)) {
                                     FlightCardView(task: task)
@@ -49,21 +51,22 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("My Flights")
-            
-            // Toolbar button: profile (left), add flight (right)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: AddFlightView(viewModel: viewModel)) {
-                        Image(systemName: "plus")
-                    }
-                }
                 ToolbarItem(placement: .navigationBarLeading) {
                     NavigationLink(destination: UserProfileView(viewModel: UserViewModel())) {
                         Image(systemName: "person.circle")
                     }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: AddFlightView(viewModel: viewModel)) {
+                        Image(systemName: "plus")
+                    }
+                }
             }
             .padding()
+            .onAppear {
+                viewModel.fetchTasks()
+            }
         }
     }
 }

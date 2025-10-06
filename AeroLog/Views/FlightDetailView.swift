@@ -7,72 +7,69 @@
 //
 
 import SwiftUI
+import CoreLocation
+import MapKit
 
 struct FlightDetailView: View {
     let task: FlightTask
-    
-    // Weather states
-    @State private var weather: WeatherData?
-    @State private var isLoadingWeather = true
-    @State private var weatherError: String?
-    
-    // Weather API service
-    private let weatherService = WeatherService()
+    @State private var weather: WeatherResponse?
+    @State private var isLoading = true
+    @State private var errorMessage: String?
+
+    @State private var arrivalCoordinate: CLLocationCoordinate2D? // for map pin
+
+    let weatherService = WeatherService()
+    let geocoder = CLGeocoder()
 
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
 
                 // Weather Block
-                Section {
-                    if isLoadingWeather {
-                        ProgressView("Loading weather...")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.systemGray6))
-                            .cornerRadius(12)
-                    } else if let weather = weather {
-                        HStack(spacing: 16) {
-                            VStack(alignment: .leading) {
-                                Text("Weather at Arrival")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                if let weather = weather {
+                    HStack(spacing: 16) {
+                        VStack(alignment: .leading) {
+                            Text("Weather at Arrival")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
 
-                                Text("\(weather.current.temp_c, specifier: "%.1f") °C")
-                                    .font(.title)
-                                    .bold()
+                            Text("\(Int(weather.current.temperature))°C")
+                                .font(.title)
+                                .bold()
 
-                                Text(weather.current.condition.text)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                            }
+                            Text(weather.current.weather_descriptions.first ?? "")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
 
-                            Spacer()
+                        Spacer()
 
-                            AsyncImage(url: URL(string: "https:\(weather.current.condition.icon)")) { image in
-                                image.resizable()
+                        if let iconURL = URL(string: weather.current.weather_icons.first ?? "") {
+                            AsyncImage(url: iconURL) { image in
+                                image
+                                    .resizable()
+                                    .frame(width: 48, height: 48)
                             } placeholder: {
                                 ProgressView()
                             }
-                            .frame(width: 48, height: 48)
                         }
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
-                    } else if let error = weatherError {
-                        Text("⚠️ Failed to load weather: \(error)")
-                            .foregroundColor(.red)
-                            .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(12)
                     }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                } else if isLoading {
+                    ProgressView("Fetching Weather…")
+                        .padding()
+                } else if let errorMessage = errorMessage {
+                    Text("⚠️ \(errorMessage)")
+                        .foregroundColor(.red)
+                        .padding()
                 }
 
-                // Airline Information Block
+                // Airline Block
                 HStack(spacing: 12) {
                     task.airline.displayImage
                         .frame(width: 36, height: 36)
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(task.airline.rawValue)
@@ -93,7 +90,7 @@ struct FlightDetailView: View {
 
                 Divider()
 
-                // Flight Route + Times
+                // Flight Route
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Flight Route")
                         .font(.caption)
@@ -108,10 +105,8 @@ struct FlightDetailView: View {
                         }
 
                         Spacer()
-
                         Image(systemName: "airplane")
                             .font(.title2)
-
                         Spacer()
 
                         VStack(alignment: .trailing) {
@@ -126,7 +121,7 @@ struct FlightDetailView: View {
 
                 Divider()
 
-                // Terminal + Gate Info
+                // Terminal
                 HStack {
                     Image(systemName: "door.left.hand.open")
                     Text("Terminal T1 · Gate C25")
@@ -134,29 +129,53 @@ struct FlightDetailView: View {
                 }
                 .foregroundColor(.secondary)
 
+                // Map showing arrival location
+                if let coordinate = arrivalCoordinate {
+                    Map(coordinateRegion: .constant(
+                        MKCoordinateRegion(
+                            center: coordinate,
+                            span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
+                        )
+                    ), annotationItems: [MapPin(location: coordinate)]) { pin in
+                        MapMarker(coordinate: pin.location, tint: .blue)
+                    }
+                    .frame(height: 220)
+                    .cornerRadius(12)
+                }
+
                 Spacer()
             }
             .padding()
         }
         .navigationTitle("Flight Details")
         .task {
-            await loadWeather()
+            await fetchWeatherForArrival()
         }
     }
 
-    // MARK: - Load weather for arrival city
-    private func loadWeather() async {
+    // MARK: - Fetch Weather Using Arrival City
+    func fetchWeatherForArrival() async {
+        isLoading = true
+        errorMessage = nil
+
         do {
-            let data = try await weatherService.fetchWeather(for: task.arrival)
-            await MainActor.run {
-                self.weather = data
-                self.isLoadingWeather = false
+            let placemarks = try await geocoder.geocodeAddressString(task.arrival)
+            if let coordinate = placemarks.first?.location?.coordinate {
+                self.arrivalCoordinate = coordinate
+                self.weather = try await weatherService.fetchWeather(for: coordinate)
+            } else {
+                errorMessage = "Unable to find location for \(task.arrival)."
             }
         } catch {
-            await MainActor.run {
-                self.weatherError = error.localizedDescription
-                self.isLoadingWeather = false
-            }
+            errorMessage = "Weather fetch failed: \(error.localizedDescription)"
         }
+
+        isLoading = false
     }
+}
+
+// Helper struct for Map annotation
+struct MapPin: Identifiable {
+    let id = UUID()
+    let location: CLLocationCoordinate2D
 }
