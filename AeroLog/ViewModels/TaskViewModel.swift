@@ -109,7 +109,7 @@ class TaskViewModel: ObservableObject {
         request.predicate = NSPredicate(format: "id == %@", task.id as CVarArg)
         
         if let entity = try? context.fetch(request).first {
-            entity?.isCompleted = task.isCompleted
+            entity.isCompleted = task.isCompleted
             saveAndReload()
         }
     }

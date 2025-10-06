@@ -1,5 +1,10 @@
+//
+//  FlightTask.swift
+//  AeroLog
+//
 //  Created by Yu-Han on 6/9/2025.
 //  Flight-specific task model
+//
 
 import Foundation
 
@@ -12,21 +17,25 @@ class FlightTask: BaseTask {
     var arrivalTime: String
     var airline: Airline
 
-    init(title: String,
+    init(id: UUID = UUID(),
+         title: String,
          flightNumber: String,
          departure: String,
          arrival: String,
          departureTime: String,
          arrivalTime: String,
          dueDate: Date,
-         airline: Airline) {
-        
-        self.airline = airline
+         airline: Airline,
+         isCompleted: Bool = false) {
+
         self.flightNumber = flightNumber
         self.departure = departure
         self.arrival = arrival
         self.departureTime = departureTime
         self.arrivalTime = arrivalTime
-        super.init(title: title, dueDate: dueDate)
+        self.airline = airline
+
+        // Pass id, title, dueDate, and isCompleted to BaseTask
+        super.init(id: id, title: title, dueDate: dueDate, isCompleted: isCompleted)
     }
 }

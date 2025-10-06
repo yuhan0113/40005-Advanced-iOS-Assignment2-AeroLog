@@ -1,13 +1,19 @@
+//
+//  AddFlightView.swift
+//  AeroLog
+//
 //  Created by Yu-Han on 6/9/2025.
 //  UI to add a new flight task
+//
 
 import SwiftUI
 
 struct AddFlightView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: TaskViewModel
-    
+
     // Form input fields
+    @State private var title = ""
     @State private var flightNumber = ""
     @State private var departure = ""
     @State private var arrival = ""
@@ -15,7 +21,7 @@ struct AddFlightView: View {
     @State private var arrivalTimeDate = Date()
     @State private var dueDate = Date()
     @State private var selectedAirline = Airline.qantas
-    
+
     // Error and search state
     @State private var showAlert = false
     @State private var errorMessage = ""
@@ -67,9 +73,11 @@ struct AddFlightView: View {
                     }
                 }
             }
-            
+
             // Flight information input section
             Section(header: Text("Flight Info")) {
+                TextField("Task Title (e.g. Business Trip)", text: $title)
+
                 TextField("Flight Number (e.g. QF123)", text: $flightNumber)
                     .autocapitalization(.allCharacters)
 
@@ -81,21 +89,23 @@ struct AddFlightView: View {
 
                 DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
             }
-            
+
             // Task submission button
             Button("Add Flight") {
                 let departureTime = formatTime(departureTimeDate)
                 let arrivalTime = formatTime(arrivalTimeDate)
 
                 do {
-                    try viewModel.addTask(title: flightNumber,
-                                          flightNumber: flightNumber,
-                                          departure: departure,
-                                          arrival: arrival,
-                                          departureTime: departureTime,
-                                          arrivalTime: arrivalTime,
-                                          dueDate: dueDate,
-                                          airline: selectedAirline)
+                    try viewModel.addTask(
+                        title: title,
+                        flightNumber: flightNumber,
+                        departure: departure,
+                        arrival: arrival,
+                        departureTime: departureTime,
+                        arrivalTime: arrivalTime,
+                        dueDate: dueDate,
+                        airline: selectedAirline
+                    )
                     dismiss()
                 } catch {
                     errorMessage = error.localizedDescription
@@ -109,7 +119,7 @@ struct AddFlightView: View {
         } message: {
             Text(errorMessage)
         }
-        
+
         // Auto match airline based on flight number prefix (e.g. QF123)
         .onChange(of: flightNumber) { newValue in
             let code = String(newValue.prefix(2)).uppercased()
@@ -131,7 +141,7 @@ struct AddFlightView: View {
         }
     }
 
-    // Converts a data object to a formatted time string ("3:34 PM")
+    // Converts a Date to a formatted time string ("3:34 PM")
     func formatTime(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
