@@ -1,9 +1,86 @@
 #### Link to Git Repository: https://github.com/yuhan0113/40005-Advanced-iOS-Assignment2-AeroLog.git
 
-# 40005-Advanced-iOS-Assignment2-AeroLog
+## 40005-Advanced-iOS-Assignment2-AeroLog
+## 40005-Advanced-iOS-Assignment3-AeroLog (Extended from Assignment 2)
 ## ✈️ AeroLog — Travel Task Management App
 
 _Aerolog_ is a SwiftUI-based iOS application designed to help travellers manage trip-related tasks with clarity and ease. Developed for **Assessment Task 2** in the subject **40005 Advanced iOS**, this project showcases the integration of **object-oriented** and **protocol-oriented** programming, clean MVVM architecture, structured error handling, unit testing, and proper version control with Git.
+
+---
+
+## Updates for Assessment Task 3 (Project 2)
+Aerolog has been extended to include more advanced iOS development features:
+
+### ✅ New Features
+- 💾 **CoreData Integration**: Persistent local storage of flight tasks
+- ☁️ **Weather API**: Live weather at arrival using WeatherStack API
+- 🗺️ **MapKit Support**: Route map showing departure and arrival cities
+- 📍 **Location Permissions**: Uses CoreLocation for geocoding weather/map
+- ⚙️ **Background Modes**: App supports background fetch for location/weather
+- 🧪 **Improved Unit Tests**: Tests for Task models and ViewModel logic
+- 🧼 **Refined UI**: Cleaner screens, better error handling, async feedback
+
+---
+
+## 📋 How to Run the App
+
+### Requirements:
+- Xcode 15+
+- iOS 17+ device or simulator
+- SwiftUI, Combine, CoreData, MapKit
+- Free API key from https://www.weatherapi.com
+
+### Setup:
+1. Clone the repo:
+    ```bash
+    git clone https://github.com/yuhan0113/40005-Advanced-iOS-Assignment2-AeroLog.git
+    ```
+2. Open `AeroLog.xcodeproj` in Xcode.
+3. In `WeatherService.swift`, replace the placeholder API key with:
+    ```swift
+    private let apiKey = "352013280e69464db4a131238250610"
+    ```
+4. Make sure CoreData `.xcdatamodeld` is added to the project and codegen is set to **Class Definition**.
+5. Set Info.plist permissions:
+    ```xml
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs your location to fetch weather updates.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs your location even in background to support weather features.</string>
+    ```
+6. Build and run!
+
+---
+
+## 📱 App Usage Guide
+
+Aerolog is designed for quick flight task management with a clean, intuitive UI. Here's a brief overview of how to use the app:
+
+### 🛫 Dashboard (Home)
+- Shows **“My Flights”** with upcoming flight tasks.
+- If no tasks exist, you'll see a welcome message with an airplane icon.
+- Tap **`+` Add Flight** (top-right) to enter a new flight.
+
+### ➕ Add Flight
+- Fill in flight number, departure/arrival cities, and times.
+- Search or auto-detect airline from flight number (e.g. `QF123` → Qantas).
+- Select due date, then tap **"Add Flight"** to save.
+- Flight is stored using **CoreData**, visible on Dashboard.
+
+### 📋 Flight Card
+- Tap a flight to view details:
+  - Live **weather** at arrival city (fetched via WeatherStack API)
+  - Departure/arrival time and airport route
+  - Completion status
+  - Terminal info (static)
+
+### 🗺️ Route Map
+- From detail screen, view a **MapKit map** of departure and arrival cities.
+- Geocoded via CoreLocation with annotations.
+
+### 👤 User Profile
+- Access from **top-left icon** on Dashboard.
+- Allows editing of user name, email, and frequent flyer number (locally stored).
 
 ---
 
