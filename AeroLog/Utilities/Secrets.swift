@@ -10,4 +10,3 @@ import Foundation
 struct Secrets {
     static let weatherAPIKey = "352013280e69464db4a131238250610"
 }
-
